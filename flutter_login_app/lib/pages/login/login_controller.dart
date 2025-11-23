@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_app/login/login_state.dart';
+import 'package:flutter_login_app/pages/login/login_state.dart';
 
 class LoginController extends Cubit<LoginState> {
   LoginController() : super(LoginInitial());

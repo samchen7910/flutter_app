@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_app/home/home_controller.dart';
-import 'package:flutter_login_app/home/home_state.dart';
+import 'package:flutter_login_app/pages/home/home_controller.dart';
+import 'package:flutter_login_app/pages/home/home_state.dart';
 
-import 'user_list/user_list_page.dart';
+import 'pokemon_list/pokemon_list_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.username});

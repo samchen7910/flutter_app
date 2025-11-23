@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_app/components/my_button.dart';
 import 'package:flutter_login_app/components/my_textfield.dart';
-import 'package:flutter_login_app/login/login_controller.dart';
-import 'package:flutter_login_app/login/login_state.dart';
+import 'package:flutter_login_app/pages/login/login_controller.dart';
+import 'package:flutter_login_app/pages/login/login_state.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

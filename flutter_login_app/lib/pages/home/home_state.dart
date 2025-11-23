@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../models/pokemon.dart';
+import '../../models/pokemon.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();
@@ -8,7 +8,7 @@ abstract class HomeState extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadingHomeState extends HomeState {}
+class InitHome extends HomeState {}
 
 class ErrorHomeState extends HomeState {
   final String error;
@@ -23,12 +23,14 @@ class DataHomeState extends HomeState {
   final List<Pokemon> pokemonList;
   final bool hasReachedMax;
   final int maxCount;
+  final bool isLoading;
   const DataHomeState({
     required this.pokemonList,
     required this.hasReachedMax,
     required this.maxCount,
+    required this.isLoading,
   });
 
   @override
-  List<Object> get props => [pokemonList, hasReachedMax, maxCount];
+  List<Object> get props => [pokemonList, hasReachedMax, maxCount, isLoading];
 }
