@@ -36,6 +36,10 @@ class _PokemonListPage extends State<PokemonListPage> {
     }
   }
 
+  Future<void> _onRefresh() async {
+    await context.read<HomeController>().refreshData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,31 +61,34 @@ class _PokemonListPage extends State<PokemonListPage> {
                         ),
                       ),
                       Expanded(
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          itemCount: state.pokemonList.length,
-                          itemBuilder: (context, index) {
-                            if (index == state.pokemonList.length &&
-                                !state.hasReachedMax) {
-                              return const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                        child: RefreshIndicator(
+                          onRefresh: _onRefresh,
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: state.pokemonList.length,
+                            itemBuilder: (context, index) {
+                              if (index == state.pokemonList.length &&
+                                  !state.hasReachedMax) {
+                                return const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              }
+
+                              if (index >= state.pokemonList.length) {
+                                return const SizedBox.shrink();
+                              }
+
+                              final pokemon = state.pokemonList[index];
+                              return PokemonPage(
+                                pokemon: pokemon,
+                                itemIndex: index,
+                                controller: context.read<HomeController>.call(),
                               );
-                            }
-
-                            if (index >= state.pokemonList.length) {
-                              return const SizedBox.shrink();
-                            }
-
-                            final pokemon = state.pokemonList[index];
-                            return PokemonPage(
-                              pokemon: pokemon,
-                              itemIndex: index,
-                              controller: context.read<HomeController>.call(),
-                            );
-                          },
+                            },
+                          ),
                         ),
                       ),
                       ElevatedButton(

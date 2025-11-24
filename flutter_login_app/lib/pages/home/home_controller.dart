@@ -11,6 +11,13 @@ class HomeController extends Cubit<HomeState> {
 
   HomeController() : super(InitHome());
 
+  Future refreshData() async {
+    currentOffset = 0;
+    maxCount = 0;
+    items = [];
+    fetchData();
+  }
+
   Future fetchData() async {
     if (state is DataHomeState && (state as DataHomeState).isLoading) {
       return;
