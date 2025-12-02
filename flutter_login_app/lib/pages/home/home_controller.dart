@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_login_app/models/pokemon_detail.dart';
 import 'package:flutter_login_app/pages/home/home_state.dart';
 import 'package:flutter_login_app/models/pokemon.dart';
 
@@ -35,7 +36,7 @@ class HomeController extends Cubit<HomeState> {
 
       try {
         final response = await Dio().get(
-          'https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${currentOffset}',
+          'https://pokeapi.co/api/v2/pokemon/?limit=20&offset=$currentOffset',
         );
 
         List<Pokemon> pokemons = [];

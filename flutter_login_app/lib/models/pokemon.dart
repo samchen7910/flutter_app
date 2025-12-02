@@ -1,9 +1,6 @@
-class Pokemon {
-  final String name;
-  final String detailUrl;
-  PokemonDetail? detail;
-  bool? isLoaded;
+import 'package:flutter_login_app/models/pokemon_detail.dart';
 
+class Pokemon {
   Pokemon({
     required this.name,
     required this.detailUrl,
@@ -11,26 +8,12 @@ class Pokemon {
     this.detail,
   });
 
+  final String name;
+  final String detailUrl;
+  PokemonDetail? detail;
+  bool? isLoaded;
+
   factory Pokemon.fromJson(Map<String, dynamic> json) {
     return Pokemon(name: json['name'], detailUrl: json['url']);
-  }
-}
-
-class PokemonDetail {
-  final String sprite;
-  final int height;
-  final int weight;
-  const PokemonDetail({
-    required this.height,
-    required this.weight,
-    required this.sprite,
-  });
-
-  factory PokemonDetail.fromJson(Map<String, dynamic> json) {
-    return PokemonDetail(
-      sprite: json['sprites']['front_default'],
-      height: json['height'],
-      weight: json['weight'],
-    );
   }
 }

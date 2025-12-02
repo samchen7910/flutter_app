@@ -3,7 +3,7 @@ import 'package:flutter_login_app/models/pokemon.dart';
 
 class PokemonDetailPage extends StatelessWidget {
   const PokemonDetailPage({super.key, required this.pokemon});
-  final Pokemon pokemon;
+  final Pokemon? pokemon;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class PokemonDetailPage extends StatelessWidget {
               // Centered image
               Center(
                 child: Image.network(
-                  pokemon.detail?.sprite ?? '',
+                  pokemon?.detail?.sprite ?? '',
                   height: 150,
                   width: 150,
                   fit: BoxFit.cover,
@@ -41,15 +41,15 @@ class PokemonDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        pokemon.name.toUpperCase(),
+                        pokemon?.name.toUpperCase() ?? '',
                         style: TextStyle(fontSize: 18),
                       ),
                       Text(
-                        'Weight: ${pokemon.detail?.weight}',
+                        'Weight: ${pokemon?.detail?.weight}',
                         style: TextStyle(fontSize: 18),
                       ),
                       Text(
-                        'Height: ${pokemon.detail?.height}',
+                        'Height: ${pokemon?.detail?.height}',
                         style: TextStyle(fontSize: 18),
                       ),
                     ],

@@ -7,7 +7,7 @@ import '../home_state.dart';
 
 class PokemonListPage extends StatefulWidget {
   const PokemonListPage({super.key, required this.username});
-  final String username;
+  final String? username;
 
   @override
   State<PokemonListPage> createState() => _PokemonListPage();
@@ -82,7 +82,7 @@ class _PokemonListPage extends State<PokemonListPage> {
                               }
 
                               final pokemon = state.pokemonList[index];
-                              return PokemonPage(
+                              return PokemonCell(
                                 pokemon: pokemon,
                                 itemIndex: index,
                                 controller: context.read<HomeController>.call(),
@@ -118,8 +118,8 @@ class _PokemonListPage extends State<PokemonListPage> {
   }
 }
 
-class PokemonPage extends StatelessWidget {
-  const PokemonPage({
+class PokemonCell extends StatelessWidget {
+  const PokemonCell({
     super.key,
     required this.pokemon,
     required this.itemIndex,
