@@ -132,7 +132,7 @@ class PokemonCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: controller.loadDetail(pokemon.detailUrl, itemIndex),
+      future: controller.loadDetail(pokemon.url, itemIndex),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return ListTile(

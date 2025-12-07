@@ -11,9 +11,13 @@ class PokemonDetail {
 
   factory PokemonDetail.fromJson(Map<String, dynamic> json) {
     return PokemonDetail(
-      sprite: json['sprites']['front_default'],
-      height: json['height'],
-      weight: json['weight'],
+      sprite:
+          json['sprites']['front_default'] ??
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
+      height: json['height'] as int,
+      weight: json['weight'] as int,
     );
   }
+
+    Map<String, dynamic> toJsonDetail() => {'sprite': sprite, 'weight': weight, 'height': height};
 }
