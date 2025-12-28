@@ -12,7 +12,8 @@ class HomeController extends Cubit<HomeState> {
   // Frist page
   int currentOffset = 0;
   int maxCount = 0;
-  bool isLocalDataLoaded = false;
+  bool isLoading = false;
+  final String _totalKey = 'total';
 
   HomeController() : super(InitHome());
 
@@ -24,9 +25,13 @@ class HomeController extends Cubit<HomeState> {
   }
 
   Future fetchData() async {
-    if (state is DataHomeState && (state as DataHomeState).isLoading) {
+
+    if (state is DataHomeState && isLoading) {
+      // (state as DataHomeState).isLoading) {
       return;
     }
+
+    isLoading = true;
 
     if (currentOffset < maxCount || maxCount == 0) {
       emit(
@@ -39,16 +44,15 @@ class HomeController extends Cubit<HomeState> {
       );
 
       try {
-        final localList = await getListLocally();
-
+        final localList = await getListLocally(currentOffset + 20);
+        final localLength = await getTotalNumber();
         // Load locally
-        if (localList.isNotEmpty && !isLocalDataLoaded) {
-          maxCount = 100000000;
+        if (localList.isNotEmpty && (localLength > localList.length)) {
+          maxCount = localLength;
           currentOffset += localList.length;
           items.addAll(localList);
           print("running here ${{items.length}}");
 
-          isLocalDataLoaded = true;
           // Displays values
           emit(
             DataHomeState(
@@ -58,6 +62,7 @@ class HomeController extends Cubit<HomeState> {
               isLoading: false,
             ),
           );
+          isLoading = false;
         } else {
           final response = await Dio().get(
             'https://pokeapi.co/api/v2/pokemon/?limit=20&offset=$currentOffset',
@@ -80,8 +85,10 @@ class HomeController extends Cubit<HomeState> {
           maxCount = data['count'] ?? 0;
           currentOffset += results.length;
           items.addAll(pokemons);
+          // print("store result --- impossible  $isLocalDataLoaded");
 
-          storeListLocally(items);
+          storeTotalNumber(items.length);
+          storeListLocally(pokemons, currentOffset);
           // Displays values
           emit(
             DataHomeState(
@@ -91,10 +98,12 @@ class HomeController extends Cubit<HomeState> {
               isLoading: false,
             ),
           );
+          isLoading = false;
         }
       } catch (error) {
         // Displays Error
         emit(ErrorHomeState(error: error.toString()));
+        isLoading = false;
       }
     }
   }
@@ -120,22 +129,35 @@ class HomeController extends Cubit<HomeState> {
           items[index].isLoaded = true;
           storeDetailLocally(detail, items[index].name);
         } catch (error) {
+          print('error: $error');
           emit(ErrorHomeState(error: error.toString()));
         }
       }
     }
   }
 
-  // Local Database Logic 
-  Future<void> storeListLocally(List<Pokemon> items) async {
+  Future<void> storeTotalNumber(int length) async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonList = items.map((pkm) => pkm.toJson()).toList();
-    prefs.setString('pokemons', jsonEncode(jsonList));
+    prefs.setInt(_totalKey, length);
   }
 
-  Future<List<Pokemon>> getListLocally() async {
+  Future<int> getTotalNumber() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString('pokemons');
+    final total = prefs.getInt(_totalKey);
+    return total ?? 0;
+  }
+
+  // Local Database Logic
+  Future<void> storeListLocally(List<Pokemon> items, int offset) async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonList = items.map((pkm) => pkm.toJson()).toList();
+    prefs.setString('$offset', jsonEncode(jsonList));
+    print("store result $offset");
+  }
+
+  Future<List<Pokemon>> getListLocally(int offset) async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString('$offset');
     // print("jsonString $jsonString");
 
     if (jsonString == null) return [];
@@ -146,7 +168,7 @@ class HomeController extends Cubit<HomeState> {
     final result = decoded
         .map((e) => Pokemon(name: e['name'], url: e['url']))
         .toList();
-    // print("result $result");
+    print("load result $offset");
     return result;
   }
 
